@@ -1,4 +1,4 @@
-import { User } from "./users.model";
+import { User } from "./user.model";
 
 let initialMiddleNumber = Math.floor(Math.random() * 100);
 let initialMonth = new Date().getMonth() + 1;
