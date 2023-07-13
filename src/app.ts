@@ -11,8 +11,11 @@ app.use(express.urlencoded({ extended: true }));
 // User Route
 app.use("/api/v1/users", UserRoutes);
 
-// app.get("/", async (req: Request, res: Response) => {
-//   // throw new ApiError(400,"Hello I Got an Error")
+// app.get("/", (req: Request, res: Response, next: NextFunction) => {
+//     // throw new Error("Hello");
+//     // res.status(200).json({
+//     //     message: "hello"
+//     // })
 // });
 
 app.use(errorHandler);

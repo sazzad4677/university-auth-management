@@ -1,13 +1,27 @@
-import { ErrorRequestHandler } from "express";
+/* eslint-disable no-console */
+/* eslint-disable no-unused-expressions */
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import { ZodError } from "zod";
 import config from "../../config";
 import { ApiError } from "../../errors/ApiError";
 import handleValidationError from "../../errors/handleValidationError";
 import { IGenericErrorMessage } from "../../interfaces/error";
+import { errorLogger } from "../../shared/logger";
+import handleZodError from "../../errors/handleZodError";
 
-const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+const errorHandler: ErrorRequestHandler = (
+  err,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  console.log(err);
   let statusCode = 500;
   let message = "Internal Server Error";
   let errorMessages: IGenericErrorMessage[] = [];
+  config.env === "DEVELOPMENT"
+    ? console.error("error", err)
+    : errorLogger.error(err);
 
   if (err?.name === "ValidationError") {
     const simplifiedError = handleValidationError(err);
@@ -16,7 +30,7 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
     errorMessages = simplifiedError.errorMessages;
   } else if (err instanceof ApiError) {
     statusCode = err.statusCode;
-    message = err?.message;
+    message;
     errorMessages = err?.message
       ? [
           {
@@ -25,6 +39,11 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
           },
         ]
       : [];
+  } else if (err instanceof ZodError) {
+    const simplifiedError = handleZodError(err);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorMessages = simplifiedError.errorMessages;
   } else if (err instanceof Error) {
     message = err?.message;
     errorMessages = err?.message
@@ -37,8 +56,7 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
       : [];
   }
 
-  res.status(400).json({
-    statusCode,
+  res.status(statusCode).json({
     success: false,
     message,
     errorMessages,
