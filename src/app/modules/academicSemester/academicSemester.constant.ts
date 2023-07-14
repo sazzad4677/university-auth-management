@@ -1,4 +1,6 @@
-export const Months: string[] = [
+import { ICodes, IMonth, ITitles } from "./academicSemester.interface";
+
+export const academicSemesterMonths: IMonth[] = [
   "January",
   "February",
   "March",
@@ -13,5 +15,5 @@ export const Months: string[] = [
   "December",
 ];
 
-export const title: string[] = ["Spring", "Summer", "Fall"];
-export const code: string[] = ["01", "02", "03"];
+export const academicSemesterTitle: ITitles[] = ["Spring", "Summer", "Fall"];
+export const academicSemesterCode: ICodes[] = ["01", "02", "03"];
