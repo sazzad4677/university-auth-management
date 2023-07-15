@@ -1,6 +1,6 @@
-import path from "path";
-import { createLogger, format, transports } from "winston";
-import DailyRotateFile from "winston-daily-rotate-file";
+import path from 'path';
+import { createLogger, format, transports } from 'winston';
+import DailyRotateFile from 'winston-daily-rotate-file';
 const { combine, timestamp, label, printf, prettyPrint } = format;
 
 const myFormat = printf(({ level, message, label, timestamp }) => {
@@ -15,9 +15,9 @@ const myFormat = printf(({ level, message, label, timestamp }) => {
 });
 
 const logger = createLogger({
-  level: "info",
+  level: 'info',
   format: combine(
-    label({ label: "log!" }),
+    label({ label: 'log!' }),
     timestamp(),
     myFormat,
     prettyPrint(),
@@ -27,23 +27,23 @@ const logger = createLogger({
     new DailyRotateFile({
       filename: path.join(
         process.cwd(),
-        "logs",
-        "winston",
-        "successes",
-        "%DATE%.success.log",
+        'logs',
+        'winston',
+        'successes',
+        '%DATE%.success.log',
       ),
-      level: "info",
-      datePattern: "YYYY-MM-DD-HH",
+      level: 'info',
+      datePattern: 'YYYY-MM-DD-HH',
       zippedArchive: true,
-      maxSize: "20m",
-      maxFiles: "14d",
+      maxSize: '20m',
+      maxFiles: '14d',
     }),
   ],
 });
 const errorLogger = createLogger({
-  level: "error",
+  level: 'error',
   format: combine(
-    label({ label: "log!" }),
+    label({ label: 'log!' }),
     timestamp(),
     myFormat,
     prettyPrint(),
@@ -53,16 +53,16 @@ const errorLogger = createLogger({
     new DailyRotateFile({
       filename: path.join(
         process.cwd(),
-        "logs",
-        "winston",
-        "errors",
-        "%DATE%-errors.log",
+        'logs',
+        'winston',
+        'errors',
+        '%DATE%-errors.log',
       ),
-      level: "error",
-      datePattern: "YYYY-MM-DD-HH",
+      level: 'error',
+      datePattern: 'YYYY-MM-DD-HH',
       zippedArchive: true,
-      maxSize: "20m",
-      maxFiles: "14d",
+      maxSize: '20m',
+      maxFiles: '14d',
     }),
   ],
 });

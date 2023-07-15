@@ -1,8 +1,8 @@
-import config from "../../../config";
-import { ApiError } from "../../../errors/ApiError";
-import { IUser } from "./user.interface";
-import { User } from "./user.model";
-import { generateUserID } from "./user.utils";
+import config from '../../../config';
+import { ApiError } from '../../../errors/ApiError';
+import { IUser } from './user.interface';
+import { User } from './user.model';
+import { generateUserID } from './user.utils';
 
 const getUser = async (): Promise<IUser[]> => {
   const users = await User.find({});
@@ -17,7 +17,7 @@ const createUser = async (user: IUser): Promise<IUser | null> => {
   // Default Password
   const createUser = await User.create(user);
   if (!createUser) {
-    throw new ApiError(400, "Failed to create user");
+    throw new ApiError(400, 'Failed to create user');
   }
   return createUser;
 };
