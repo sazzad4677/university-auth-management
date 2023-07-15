@@ -17,3 +17,11 @@ export const academicSemesterMonths: IMonth[] = [
 
 export const academicSemesterTitle: ITitles[] = ['Spring', 'Summer', 'Fall'];
 export const academicSemesterCode: ICodes[] = ['01', '02', '03'];
+
+export const academicSemesterTitleCodeMapper: {
+  [key: string]: string;
+} = {
+  Spring: '01',
+  Summer: '02',
+  Fall: '03',
+};

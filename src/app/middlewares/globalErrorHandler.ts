@@ -5,9 +5,9 @@ import { ZodError } from 'zod';
 import config from '../../config';
 import { ApiError } from '../../errors/ApiError';
 import handleValidationError from '../../errors/handleValidationError';
+import handleZodError from '../../errors/handleZodError';
 import { IGenericErrorMessage } from '../../interfaces/error';
 import { errorLogger } from '../../shared/logger';
-import handleZodError from '../../errors/handleZodError';
 
 const errorHandler: ErrorRequestHandler = (
   err,
@@ -30,7 +30,7 @@ const errorHandler: ErrorRequestHandler = (
     errorMessages = simplifiedError.errorMessages;
   } else if (err instanceof ApiError) {
     statusCode = err.statusCode;
-    message;
+    message = err?.message;
     errorMessages = err?.message
       ? [
           {
