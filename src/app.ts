@@ -1,5 +1,6 @@
 import cors from 'cors';
-import express, { Application } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import errorHandler from './app/middlewares/globalErrorHandler';
 import routes from './routes';
 const app: Application = express();
@@ -10,6 +11,21 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/v1/', routes);
+
+// handle not found error
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.status(StatusCodes.NOT_FOUND).json({
+    success: false,
+    message: 'Invalid Path',
+    errorMessage: [
+      {
+        path: req.originalUrl,
+        message: 'API Path not found',
+      },
+    ],
+  });
+  next();
+});
 
 app.use(errorHandler);
 
