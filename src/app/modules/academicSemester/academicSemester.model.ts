@@ -16,11 +16,10 @@ const academicSemesterSchema = new Schema<IAcademicSemester>(
     title: {
       type: String,
       required: true,
-      unique: true,
       enum: academicSemesterTitle,
     },
     year: {
-      type: Number,
+      type: String,
       required: true,
     },
     code: {
@@ -57,6 +56,6 @@ academicSemesterSchema.pre('save', async function (next) {
 });
 
 export const AcademicSemester = model<IAcademicSemester, AcademicSemesterModel>(
-  'AcademicSemecter',
+  'AcademicSemester',
   academicSemesterSchema,
 );
