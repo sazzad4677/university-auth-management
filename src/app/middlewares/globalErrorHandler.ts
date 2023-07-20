@@ -1,6 +1,7 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-expressions */
-import { ErrorRequestHandler, Request, Response } from 'express';
+import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
 import config from '../../config';
 import { ApiError } from '../../errors/ApiError';
@@ -14,6 +15,7 @@ const errorHandler: ErrorRequestHandler = (
   err,
   req: Request,
   res: Response,
+  next: NextFunction,
 ) => {
   console.error('~Global Error handler~', err);
   let statusCode = 500;
