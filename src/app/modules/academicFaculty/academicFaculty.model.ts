@@ -7,7 +7,7 @@ const FacultySchema = new Schema<IFaculty>(
   {
     title: { type: String, required: true, unique: true },
   },
-  { timestamps: true },
+  { timestamps: true, toJSON: { virtuals: true } },
 );
 
 FacultySchema.pre('save', async function (next) {
@@ -18,4 +18,7 @@ FacultySchema.pre('save', async function (next) {
   next();
 });
 
-export const Faculty = model<IFaculty, FacultyModel>('Faculty', FacultySchema);
+export const Faculty = model<IFaculty, FacultyModel>(
+  'AcademicFaculty',
+  FacultySchema,
+);
