@@ -6,4 +6,7 @@ export type IAcademicDepartment = {
   academicFaculty: Types.ObjectId | IFaculty;
 };
 
-export type AcademicDepartmentModel = Model<IAcademicDepartment, object>;
+export type AcademicDepartmentModel = Model<
+  IAcademicDepartment,
+  Record<string, unknown>
+>;

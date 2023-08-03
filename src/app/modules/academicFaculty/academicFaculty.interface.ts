@@ -4,4 +4,4 @@ export type IFaculty = {
   title: string;
 };
 
-export type FacultyModel = Model<IFaculty, object>;
+export type FacultyModel = Model<IFaculty, Record<string, unknown>>;

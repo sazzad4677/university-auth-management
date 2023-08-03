@@ -13,9 +13,9 @@ const getUser = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-const createUser = catchAsync(async (req: Request, res: Response) => {
-  const user = req.body;
-  const result = await UserService.createUser(user);
+const createStudent = catchAsync(async (req: Request, res: Response) => {
+  const { student, ...user } = req.body;
+  const result = await UserService.createStudent(student, user);
 
   sendResponse(res, {
     statusCode: StatusCodes.ACCEPTED,
@@ -26,6 +26,6 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const UserController = {
-  createUser,
+  createStudent,
   getUser,
 };

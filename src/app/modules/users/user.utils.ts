@@ -1,44 +1,40 @@
+import { IAcademicSemester } from '../academicSemester/academicSemester.interface';
 import { User } from './user.model';
 
-let initialMiddleNumber = Math.floor(Math.random() * 100);
-let initialMonth = new Date().getMonth() + 1;
+export const findLastStudentId = async (): Promise<string | undefined> => {
+  const lastStudent = await User.findOne({ role: 'student' }, { id: 1, _id: 0 })
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
 
-export const findLastUserID = async () => {
-  const lastUserID = await User.findOne({}, { id: 1, _id: 0 }).sort({ id: -1 });
-  return lastUserID?.id;
+  return lastStudent?.id ? lastStudent?.id.substring(4) : undefined;
 };
 
-export async function generateUserID(): Promise<string> {
-  const lastID = await findLastUserID();
-  let nextID;
+export const generateStudentID = async (
+  academicSemester: IAcademicSemester | null,
+): Promise<string> => {
+  const currentId =
+    (await findLastStudentId()) || (0).toString().padStart(5, '0'); //00000
+  //increment by 1
+  let incrementedId = (parseInt(currentId) + 1).toString().padStart(5, '0');
+  incrementedId = `${academicSemester.year.substring(
+    2,
+  )}${academicSemester.code.substring(1)}${incrementedId}`;
+  return incrementedId;
+};
 
-  if (lastID) {
-    // Extract the numeric part of the last ID
-    const lastNumericID = parseInt(lastID.split('-')[2]);
+export const findLastFacultyID = async (): Promise<string | undefined> => {
+  const lastFaculty = await User.findOne({ role: 'faculty' }, { id: 1, _id: 0 })
+    .sort({ createdAt: -1 })
+    .lean();
+  return lastFaculty?.id ? lastFaculty?.id.substring(4) : undefined;
+};
 
-    // Increment the numeric ID
-    const nextNumericID = lastNumericID + 1;
-
-    // Create the next ID with padded zeros
-    nextID = nextNumericID.toString().padStart(4, '0');
-  } else {
-    // No ID found in the database, set initial ID as "0001"
-    nextID = '0001';
-  }
-
-  const yearCode = new Date().getFullYear() % 100; // Extract the last two digits of the year
-  const currentMonth = new Date().getMonth() + 1;
-
-  let middle;
-
-  if (currentMonth - initialMonth >= 6) {
-    initialMiddleNumber += 1;
-    initialMonth = currentMonth;
-    middle = initialMiddleNumber.toString().padStart(2, '0');
-  } else {
-    middle = initialMiddleNumber.toString().padStart(2, '0');
-  }
-
-  const userID = `${yearCode}${currentMonth >= 6 ? 2 : 1}-${middle}-${nextID}`;
-  return userID;
-}
+export const generateFacultyID = async (): Promise<string> => {
+  const currentID =
+    (await findLastFacultyID()) || (0).toString().padStart(5, '0');
+  let incrementedId = (parseInt(currentID) + 1).toString().padStart(5, '0');
+  incrementedId = `F-${incrementedId}`;
+  return incrementedId;
+};
