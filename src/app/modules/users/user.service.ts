@@ -53,7 +53,7 @@ const createStudent = async (
     throw error;
   }
   if (newUserAllData) {
-    newUserAllData = await User.find({ id: newUserAllData.id }).populate({
+    newUserAllData = await User.findOne({ id: newUserAllData.id }).populate({
       path: 'student',
       populate: [
         { path: 'academicSemester' },
