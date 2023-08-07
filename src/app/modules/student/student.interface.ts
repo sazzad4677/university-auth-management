@@ -1,8 +1,8 @@
 import { Model, Types } from 'mongoose';
+import { bloodGroup as blood, genders } from '../../../constants/genetics';
 import { IAcademicDepartment } from '../academicDepartment/academicDepartment.interface';
 import { IAcademicSemester } from '../academicSemester/academicSemester.interface';
 import { IFaculty } from './../academicFaculty/academicFaculty.interface';
-import { bloodGroup as blood, genders } from './student.constant';
 
 // Interface for Guardian
 type Guardian = {

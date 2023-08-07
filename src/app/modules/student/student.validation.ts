@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { bloodGroup, genders } from '../student/student.constant';
+import { bloodGroup, genders } from '../../../constants/genetics';
 
 const updateStudentZodSchema = z.object({
   body: z.object({
