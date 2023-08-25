@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-expressions */
@@ -17,7 +18,7 @@ const errorHandler: ErrorRequestHandler = (
   res: Response,
   next: NextFunction,
 ) => {
-  console.error('~Global Error handler~', err);
+  // console.error('~Global Error handler~', err);
   let statusCode = 500;
   let message = 'Internal Server Error';
   let errorMessages: IGenericErrorMessage[] = [];

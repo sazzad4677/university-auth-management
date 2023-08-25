@@ -10,7 +10,6 @@ import { IStudent } from './../student/student.interface';
 import { IUser } from './user.interface';
 import { User } from './user.model';
 import { generateFacultyId, generateStudentID } from './user.utils';
-
 const getUser = async (): Promise<IUser[]> => {
   const users = await User.find({});
   return users;
@@ -25,6 +24,7 @@ const createStudent = async (
   if (!user.password) {
     user.password = config.defaultStudentPassword as string;
   }
+
   // set role
   user.role = 'student';
 
