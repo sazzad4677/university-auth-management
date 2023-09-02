@@ -20,14 +20,23 @@ const refreshTokenZodSchema = z.object({
 });
 
 const changePasswordZodSchema = z.object({
-  body: z.object({
-    oldPassword: z.string({
-      required_error: 'Old password  is required',
+  body: z
+    .object({
+      oldPassword: z.string({
+        required_error: 'Old password is required',
+      }),
+      newPassword: z.string({
+        required_error: 'New password is required',
+      }),
+    })
+    .refine(data => {
+      if (data.oldPassword === data.newPassword) {
+        return {
+          oldPassword: 'Old password and new password cannot be the same',
+        };
+      }
+      return true;
     }),
-    newPassword: z.string({
-      required_error: 'New password  is required',
-    }),
-  }),
 });
 
 export const AuthValidation = {

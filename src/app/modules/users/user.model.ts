@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
 import config from '../../../config';
-import { IUser, IUserMethods, UserModel } from './user.interface';
+import { IUser, UserModel } from './user.interface';
 
-const userSchema = new Schema<IUser, Record<string, never>, IUserMethods>(
+const userSchema = new Schema<IUser, UserModel>(
   {
     id: {
       type: String,
@@ -31,29 +31,35 @@ const userSchema = new Schema<IUser, Record<string, never>, IUserMethods>(
       type: Boolean,
       default: true,
     },
-    // admin: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: 'Admin',
-    // },
+    passwordChangedAt: {
+      type: Date,
+    },
+    admin: {
+      type: Schema.Types.ObjectId,
+      ref: 'Admin',
+    },
   },
   { timestamps: true, toJSON: { virtuals: true } },
 );
 
-userSchema.methods.isUserExists = async function (
-  id,
-): Promise<Partial<IUser> | null> {
+userSchema.statics.isUserExist = async function (
+  id: string,
+): Promise<Pick<
+  IUser,
+  'id' | 'role' | 'password' | 'needsPasswordChange'
+> | null> {
   const user = await User.findOne(
     { id },
-    { id: 1, password: 1, needsPasswordChange: 1 },
+    { id: 1, password: 1, needsPasswordChange: 1, role: 1 },
   );
   return user;
 };
 
-userSchema.methods.isPasswordMatched = async function (
+userSchema.statics.isPasswordMatched = async function (
   givenPassword: string,
   savedPassword: string,
 ): Promise<boolean> {
-  const isMatched = await bcrypt.compare(givenPassword, savedPassword);
+  const isMatched = await bcrypt.compare(savedPassword, givenPassword);
   return isMatched;
 };
 
@@ -63,6 +69,9 @@ userSchema.pre('save', async function (next) {
     this.password,
     Number(config.bcryptSaltRounds),
   );
+  if (!this.needsPasswordChange) {
+    this.passwordChangedAt = new Date();
+  }
   next();
 });
 
